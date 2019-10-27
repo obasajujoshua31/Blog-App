@@ -32,9 +32,22 @@ func New(connString string) (*DB, error) {
 	return &DB{db}, nil
 }
 
-func ConnString(connString config.AppConfig) string {
+func connString(connString config.AppConfig) string {
 	conn := fmt.Sprintf(
 		"host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", connString.Host, connString.Port, connString.User, connString.DBName, connString.Password)
 
 	return conn
+}
+
+
+func ConnectToDB(appConfig config.AppConfig) (*DB, error) {
+
+	db, err := New(
+		connString(appConfig))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

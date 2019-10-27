@@ -67,3 +67,13 @@ func (r *Resolver) CreateUserResolver(p graphql.ResolveParams) (interface{}, err
 	return nil, nil
 
 }
+
+func (r *Resolver) GetAllUserResolver(p graphql.ResolveParams) (interface{}, error) {
+	allUsers, err := r.db.GetAllUsers()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return allUsers, nil
+}

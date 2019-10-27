@@ -16,11 +16,37 @@ const (
 	selectByName  = "SELECT * FROM users WHERE name=$1"
 	selectByID    = "SELECT * FROM users WHERE id=$1"
 	createUserSQL = "INSERT INTO users(name, age, profession, friendly) VALUES ($1, $2, $3, $4) RETURNING *;"
+	selectAllUsers = "SELECT * FROM users"
 )
 
 func (d *DB) GetUserByName(name string) ([]User, error) {
 
 	rows, err := queryDB(d, name, selectByName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var user User
+
+	var users []User
+
+	for rows.Next() {
+		err = decodeUser(rows, &user)
+
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (d *DB) GetAllUsers() ([]User, error) {
+
+	rows, err := queryDB(d, nil, selectAllUsers)
 
 	if err != nil {
 		return nil, err
@@ -107,7 +133,14 @@ func queryDB(d *DB, param interface{}, query string) (*sql.Rows, error) {
 		return nil, err
 	}
 
-	rows, err := stmt.Query(param)
+	var rows *sql.Rows
+
+	if param == nil {
+		rows, err = stmt.Query()
+
+	} else {
+		rows, err = stmt.Query(param)
+	}
 
 	if err != nil {
 		return nil, err

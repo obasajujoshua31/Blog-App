@@ -1,0 +1,28 @@
+INSERT INTO blog (title, content, author_id)
+VALUES
+('purpose', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)', 1),
+('purpose 2', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)',  2),
+('passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 2),
+('Passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 1),
+('frankie', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 3),
+('purpose', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)', 2),
+('purpose 2', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)',  3),
+('passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 4),
+('Passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 5),
+('frankie', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 4),
+('purpose', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)', 1),
+('purpose 2', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)',  2),
+('passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 5),
+('Passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 6),
+('frankie', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 5),
+('purpose', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)', 5),
+('purpose 2', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)',  3),
+('passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 2),
+('Passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 4),
+('frankie', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 6),
+('purpose', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)', 1),
+('purpose 2', 'The purpose of lorem ipsum is to create a natural looking block of text (sentence, paragraph, page, etc.)',  2),
+('passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 2),
+('Passage', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 4),
+('frankie', 'The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.', 1);
+

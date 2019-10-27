@@ -6,6 +6,7 @@ import (
 
 func getQuery(resolver Resolver) graphql.Fields {
 
+
 	fields := graphql.Fields{
 		"users": &graphql.Field{
 			Type: graphql.NewList(QQLUser),
@@ -15,6 +16,10 @@ func getQuery(resolver Resolver) graphql.Fields {
 				},
 			},
 			Resolve: resolver.UserResolver,
+		},
+			"allUsers": &graphql.Field{
+				Type: graphql.NewList(QQLUser),
+				Resolve: resolver.GetAllUserResolver,
 		},
 		"user": &graphql.Field{
 			Type: QQLUser,

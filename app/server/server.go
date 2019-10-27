@@ -2,6 +2,7 @@ package server
 
 import (
 	"blog-app/app/config"
+	"blog-app/app/services"
 	"fmt"
 	"github.com/graphql-go/graphql"
 	"net/http"
@@ -16,7 +17,7 @@ func Start() error {
 		return err
 	}
 
-	db, err := connectToDB(appConfiguration)
+	db, err := services.ConnectToDB(appConfiguration)
 
 	if err != nil {
 		return err
@@ -38,7 +39,7 @@ func Start() error {
 
 	server.InitMiddlewares()
 
-	err = setUpGraphiQL(server)
+	err = server.setUpGraphiQL()
 
 	if err != nil {
 		return  err

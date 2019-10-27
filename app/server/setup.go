@@ -61,27 +61,15 @@ func (s *Server) InitMiddlewares() {
 	)
 }
 
-func connectToDB(appConfig config.AppConfig) (*services.DB, error) {
 
-	db, err := services.New(
-		services.ConnString(appConfig))
-
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
-
-func setUpGraphiQL (server *Server) error {
+func (s *Server) setUpGraphiQL () error {
 	graphiqlHandler, err := graphiql.NewGraphiqlHandler("/graphql")
 
 	if err != nil {
 		return err
 	}
 
-	http.HandleFunc("/graphql", server.startGraphqlServer())
+	http.HandleFunc("/graphql", s.startGraphqlServer())
 	http.Handle("/graphiql", graphiqlHandler)
 	return  nil
 }

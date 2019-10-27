@@ -4,6 +4,7 @@ import (
 	"blog-app/app/config"
 	"blog-app/app/services"
 	"encoding/json"
+	"github.com/friendsofgo/graphiql"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
 	"github.com/graphql-go/graphql"
@@ -70,4 +71,17 @@ func connectToDB(appConfig config.AppConfig) (*services.DB, error) {
 	}
 
 	return db, nil
+}
+
+
+func setUpGraphiQL (server *Server) error {
+	graphiqlHandler, err := graphiql.NewGraphiqlHandler("/graphql")
+
+	if err != nil {
+		return err
+	}
+
+	http.HandleFunc("/graphql", server.startGraphqlServer())
+	http.Handle("/graphiql", graphiqlHandler)
+	return  nil
 }

@@ -38,11 +38,15 @@ func Start() error {
 
 	server.InitMiddlewares()
 
-	server.Router.Post("/graphql", server.startGraphqlServer())
+	err = setUpGraphiQL(server)
+
+	if err != nil {
+		return  err
+	}
 
 	defer db.Close()
 
 	fmt.Printf("Starting GraphQL Server on port %s .....", appConfiguration.AppPort)
 
-	return http.ListenAndServe(appConfiguration.AppPort, *server.Router)
+	return http.ListenAndServe(appConfiguration.AppPort, nil)
 }

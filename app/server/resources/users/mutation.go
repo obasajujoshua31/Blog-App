@@ -1,10 +1,12 @@
 package users
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+)
 
-func getMutation(resolver Resolver) graphql.Fields {
-	return graphql.Fields{
-		"create": &graphql.Field{
+
+func GetMutation(resolver UserResolver) map[string]*graphql.Field {
+		fields:=  &graphql.Field{
 			Type: QQLUser,
 			Args: graphql.FieldConfigArgument{
 				"newUser": &graphql.ArgumentConfig{
@@ -13,6 +15,10 @@ func getMutation(resolver Resolver) graphql.Fields {
 				},
 			},
 			Resolve: resolver.CreateUserResolver,
-		},
-	}
+		}
+
+		return map[string]*graphql.Field{
+			"create": fields,
+		}
+
 }

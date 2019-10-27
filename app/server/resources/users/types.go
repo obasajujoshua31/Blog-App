@@ -1,6 +1,8 @@
 package users
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+)
 
 var QQLUser = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -21,6 +23,9 @@ var QQLUser = graphql.NewObject(
 			},
 			"friendly": &graphql.Field{
 				Type: graphql.Boolean,
+			},
+			"Blogs": &graphql.Field{
+				Type:             graphql.NewList(blog),
 			},
 		},
 	})
@@ -45,3 +50,27 @@ var QQLUserInput = graphql.InputObjectConfigFieldMap{
 		Type: graphql.Boolean,
 	},
 }
+
+var blog = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Blogs",
+
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"title": &graphql.Field{
+				Type: graphql.String,
+			},
+			"number_of_comments": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"content": &graphql.Field{
+				Type: graphql.String,
+			},
+			"AuthorID": &graphql.Field{
+				Type: graphql.Int,
+				Name:   "author_id",
+			},
+		},
+	})

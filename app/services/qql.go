@@ -5,9 +5,11 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-type Root struct {
-	Query *graphql.Object
+
+type Resolver struct {
+	DB *DB
 }
+
 
 func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 	result := graphql.Do(graphql.Params{

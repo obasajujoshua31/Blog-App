@@ -3,11 +3,12 @@ package server
 import (
 	"blog-app/app/config"
 	"blog-app/app/services"
+	"encoding/json"
 	"fmt"
 	"github.com/graphql-go/graphql"
 	"net/http"
 
-	"blog-app/app/server/resources/users"
+	"blog-app/app/server/resources/global"
 )
 
 func Start() error {
@@ -23,7 +24,20 @@ func Start() error {
 		return err
 	}
 
-	rootQuery := users.NewRoot(db)
+
+	data, err := db.GetUserByID(1)
+
+	if err != nil {
+		return err
+	}
+
+	dt, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Data printed", string(dt))
+
+	rootQuery :=global.NewRoot(db)
 
 	sc, err := graphql.NewSchema(
 		graphql.SchemaConfig{

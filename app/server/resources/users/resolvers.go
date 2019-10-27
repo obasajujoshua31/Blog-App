@@ -7,16 +7,16 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-type Resolver struct {
-	db *services.DB
+type UserResolver struct {
+	services.Resolver
 }
 
-func (r *Resolver) UserResolver(p graphql.ResolveParams) (interface{}, error) {
+func (r *UserResolver) UserResolverByName(p graphql.ResolveParams) (interface{}, error) {
 	name, ok := p.Args["name"].(string)
 
 	if ok {
 
-		users, err := r.db.GetUserByName(name)
+		users, err := r.DB.GetUserByName(name)
 
 		if err != nil {
 			return nil, err
@@ -27,11 +27,11 @@ func (r *Resolver) UserResolver(p graphql.ResolveParams) (interface{}, error) {
 	return nil, nil
 }
 
-func (r *Resolver) UserResolverByID(p graphql.ResolveParams) (interface{}, error) {
+func (r *UserResolver) UserResolverByID(p graphql.ResolveParams) (interface{}, error) {
 	id, ok := p.Args["id"].(int)
 
 	if ok {
-		user, err := r.db.GetUserByID(id)
+		user, err := r.DB.GetUserByID(id)
 
 		if err != nil {
 			return nil, err
@@ -51,11 +51,11 @@ func (r *Resolver) UserResolverByID(p graphql.ResolveParams) (interface{}, error
 
 }
 
-func (r *Resolver) CreateUserResolver(p graphql.ResolveParams) (interface{}, error) {
+func (r *UserResolver) CreateUserResolver(p graphql.ResolveParams) (interface{}, error) {
 	user, ok := p.Args["newUser"].(map[string]interface{})
 
 	if ok {
-		newUser, err := r.db.CreateUser(user)
+		newUser, err := r.DB.CreateUser(user)
 
 		if err != nil {
 			return nil, err
@@ -68,8 +68,8 @@ func (r *Resolver) CreateUserResolver(p graphql.ResolveParams) (interface{}, err
 
 }
 
-func (r *Resolver) GetAllUserResolver(p graphql.ResolveParams) (interface{}, error) {
-	allUsers, err := r.db.GetAllUsers()
+func (r *UserResolver) GetAllUserResolver(p graphql.ResolveParams) (interface{}, error) {
+	allUsers, err := r.DB.GetAllUsers()
 
 	if err != nil {
 		return nil, err

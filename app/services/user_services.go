@@ -10,13 +10,14 @@ type User struct {
 	Age        string
 	Profession string
 	Friendly   bool
+	Blogs 		[]Blog
 }
 
 const (
-	selectByName  = "SELECT * FROM users WHERE name=$1"
-	selectByID    = "SELECT * FROM users WHERE id=$1"
+	selectByName  = "SELECT * FROM users JOIN blog ON blog.author_id = users.id WHERE users.name=$1;"
+	selectByID    = "SELECT * FROM users JOIN blog ON blog.author_id = users.id WHERE users.id=$1;"
 	createUserSQL = "INSERT INTO users(name, age, profession, friendly) VALUES ($1, $2, $3, $4) RETURNING *;"
-	selectAllUsers = "SELECT * FROM users"
+	selectAllUsers = "SELECT * FROM users JOIN blog ON blog.author_id = users.id"
 )
 
 func (d *DB) GetUserByName(name string) ([]User, error) {
@@ -29,16 +30,18 @@ func (d *DB) GetUserByName(name string) ([]User, error) {
 
 	var user User
 
+	var blog Blog
+
 	var users []User
 
 	for rows.Next() {
-		err = decodeUser(rows, &user)
+		err = decodeUser(rows, &user, &blog)
 
 		if err != nil {
 			return nil, err
 		}
 
-		users = append(users, user)
+		users = append(users, constructUser(user, blog))
 	}
 
 	return users, nil
@@ -56,14 +59,16 @@ func (d *DB) GetAllUsers() ([]User, error) {
 
 	var users []User
 
+	var blog Blog
+
 	for rows.Next() {
-		err = decodeUser(rows, &user)
+		err = decodeUser(rows, &user, &blog)
 
 		if err != nil {
 			return nil, err
 		}
 
-		users = append(users, user)
+		users = append(users, constructUser(user, blog))
 	}
 
 	return users, nil
@@ -79,15 +84,20 @@ func (d *DB) GetUserByID(id int) (User, error) {
 
 	var user User
 
+	var blog Blog
+
 	for rows.Next() {
-		err = decodeUser(rows, &user)
+		err = decodeUser(rows, &user, &blog)
 
 		if err != nil {
 			return User{}, err
 		}
 	}
 
-	return user, nil
+	retUser := constructUser(user, blog)
+
+
+	return retUser, nil
 }
 
 func (d *DB) CreateUser(user map[string]interface{}) (User, error) {
@@ -107,7 +117,7 @@ func (d *DB) CreateUser(user map[string]interface{}) (User, error) {
 	var resUser User
 
 	for res.Next() {
-		err = decodeUser(res, &resUser)
+		err = res.Scan(&resUser.ID, &resUser.Name, &resUser.Age, &resUser.Profession, &resUser.Friendly)
 		if err != nil {
 			return User{}, nil
 		}
@@ -116,14 +126,29 @@ func (d *DB) CreateUser(user map[string]interface{}) (User, error) {
 	return resUser, nil
 }
 
-func decodeUser(rows *sql.Rows, user *User) error {
-	err := rows.Scan(&user.ID, &user.Name, &user.Age, &user.Profession, &user.Friendly)
 
+func decodeUser(rows *sql.Rows, user *User, blog *Blog) error {
+	err := rows.Scan(&user.ID, &user.Name, &user.Age, &user.Profession,
+		&user.Friendly, &blog.ID, &blog.Title,
+		&blog.NumberOfComments, &blog.Content, &blog.AuthorID)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func constructUser (user User, blog Blog) User {
+	var Blogs []Blog
+
+	return User{
+		ID:         user.ID,
+		Name:       user.Name,
+		Age:        user.Age,
+		Profession: user.Profession,
+		Friendly:   user.Friendly,
+		Blogs:      append(Blogs, blog),
+	}
 }
 
 func queryDB(d *DB, param interface{}, query string) (*sql.Rows, error) {

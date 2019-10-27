@@ -1,4 +1,4 @@
-package users
+package global
 
 import (
 	"blog-app/app/services"
@@ -10,8 +10,9 @@ type Root struct {
 	Query    *graphql.Object
 }
 
+
 func NewRoot(db *services.DB) *Root {
-	resolver := Resolver{db}
+	resolver := services.Resolver{DB:db}
 
 	root := Root{
 		Query: graphql.NewObject(graphql.ObjectConfig{
@@ -25,3 +26,4 @@ func NewRoot(db *services.DB) *Root {
 	}
 	return &root
 }
+

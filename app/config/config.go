@@ -1,21 +1,19 @@
 package config
 
-
 import (
 	"fmt"
-	"os"
 	"github.com/joho/godotenv"
+	"os"
 	"strconv"
 )
 
 type AppConfig struct {
-	Host string
-	User string
-	Port int
+	Host     string
+	User     string
+	Port     int
 	Password string
-	DBName string
-	AppPort string
-
+	DBName   string
+	AppPort  string
 }
 
 func GetConfig() (AppConfig, error) {
@@ -32,16 +30,14 @@ func GetConfig() (AppConfig, error) {
 		return AppConfig{}, err
 	}
 
-
-
 	config := AppConfig{
 		Host:     os.Getenv("HOST"),
 		User:     os.Getenv("DBUSER"),
-		Port:      port,
+		Port:     port,
 		Password: os.Getenv("PASSWORD"),
-		DBName: os.Getenv("DBNAME"),
+		DBName:   os.Getenv("DBNAME"),
 		AppPort:  fmt.Sprintf(":%s", os.Getenv("APP_PORT")),
-
 	}
 	return config, nil
+
 }

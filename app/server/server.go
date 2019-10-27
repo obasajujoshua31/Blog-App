@@ -9,8 +9,6 @@ import (
 	"blog-app/app/server/resources/users"
 )
 
-
-
 func Start() error {
 	appConfiguration, err := config.GetConfig()
 
@@ -18,38 +16,33 @@ func Start() error {
 		return err
 	}
 
-     db, err := connectToDB(appConfiguration)
+	db, err := connectToDB(appConfiguration)
 
+	if err != nil {
+		return err
+	}
 
-     if err != nil {
-     	return err
-	 }
+	rootQuery := users.NewRoot(db)
 
-     rootQuery := users.NewRoot(db)
-
-     sc, err := graphql.NewSchema(
-     	graphql.SchemaConfig{
-			Query:        rootQuery.Query,
+	sc, err := graphql.NewSchema(
+		graphql.SchemaConfig{
+			Query:    rootQuery.Query,
+			Mutation: rootQuery.Mutation,
 		})
 
-     if err != nil {
-     	fmt.Println("Error creating Schema", err)
-	 }
+	if err != nil {
+		fmt.Println("Error creating Schema", err)
+	}
 
 	server := NewServer(&appConfiguration, &sc)
 
 	server.InitMiddlewares()
 
-	 server.Router.Post("/graphql", server.startGraphqlServer())
+	server.Router.Post("/graphql", server.startGraphqlServer())
 
-     defer db.Close()
+	defer db.Close()
 
-     fmt.Printf("Starting GraphQL Server on port %s .....", appConfiguration.AppPort)
+	fmt.Printf("Starting GraphQL Server on port %s .....", appConfiguration.AppPort)
 
-    return http.ListenAndServe(appConfiguration.AppPort, *server.Router)
+	return http.ListenAndServe(appConfiguration.AppPort, *server.Router)
 }
-
-
-
-
-

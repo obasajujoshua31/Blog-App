@@ -12,8 +12,8 @@ import (
 
 type Server struct {
 	Configuration *config.AppConfig
-	GQLSchema *graphql.Schema
-	Router *Router
+	GQLSchema     *graphql.Schema
+	Router        *Router
 }
 
 type reqBody struct {
@@ -22,15 +22,15 @@ type reqBody struct {
 
 func NewServer(config *config.AppConfig, schema *graphql.Schema) *Server {
 	server := &Server{
-		Configuration:  config,
+		Configuration: config,
 		Router:        NewRouter(),
-		GQLSchema: schema,
+		GQLSchema:     schema,
 	}
 
 	return server
 }
 
-func (s *Server) startGraphqlServer () http.HandlerFunc{
+func (s *Server) startGraphqlServer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Body == nil {
 			http.Error(w, "Must Provide graphql query in request body", 400)

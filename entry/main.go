@@ -7,12 +7,9 @@ import (
 
 func main() {
 
-
-	err:= server.Start()
-
+	err := server.Start()
 
 	if err != nil {
 		log.Fatal("Error in starting Server", err)
 	}
 }
-

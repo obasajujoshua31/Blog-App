@@ -16,7 +16,6 @@ type DB struct {
 	*sql.DB
 }
 
-
 func New(connString string) (*DB, error) {
 	db, err := sql.Open(driverName, connString)
 
@@ -39,4 +38,3 @@ func ConnString(connString config.AppConfig) string {
 
 	return conn
 }
-

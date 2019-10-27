@@ -1,35 +1,31 @@
 package users
 
 import (
-	"blog-app/app/services"
 	"github.com/graphql-go/graphql"
-	)
+)
 
+func getQuery(resolver Resolver) graphql.Fields {
 
-
-type Root struct {
-	Query *graphql.Object
-}
-
-
-func NewRoot (db *services.DB) *Root{
-	resolver := Resolver{db}
-
-	root := Root{Query: graphql.NewObject(graphql.ObjectConfig{
-		Name: "Query",
-		Fields: graphql.Fields{
-			"users": &graphql.Field{
-				Type: graphql.NewList(QQLUser),
-				Args: graphql.FieldConfigArgument{
-					"name": &graphql.ArgumentConfig{
-						Type: graphql.String,
-					},
+	fields := graphql.Fields{
+		"users": &graphql.Field{
+			Type: graphql.NewList(QQLUser),
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{
+					Type: graphql.String,
 				},
-				Resolve: resolver.UserResolver,
 			},
+			Resolve: resolver.UserResolver,
 		},
-	},
-	),
+		"user": &graphql.Field{
+			Type: QQLUser,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.Int,
+				},
+			},
+			Resolve: resolver.UserResolverByID,
+		},
 	}
-	return &root
+	return fields
+
 }

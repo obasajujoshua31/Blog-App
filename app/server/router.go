@@ -9,10 +9,5 @@ type Router struct {
 }
 
 func NewRouter() *Router {
-	return &Router{ chi.NewRouter()}
+	return &Router{chi.NewRouter()}
 }
-
-
-
-
-

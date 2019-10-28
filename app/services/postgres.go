@@ -2,9 +2,10 @@ package services
 
 import (
 	"blog-app/app/config"
-	"database/sql"
 	"fmt"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/lib/pq"
 )
 
@@ -13,18 +14,13 @@ const (
 )
 
 type DB struct {
-	*sql.DB
+	*gorm.DB
 }
 
 func New(connString string) (*DB, error) {
-	db, err := sql.Open(driverName, connString)
+	//db, err := sql.Open(driverName, connString)
 
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
-
+	db, err := gorm.Open(driverName, connString)
 	if err != nil {
 		return nil, err
 	}

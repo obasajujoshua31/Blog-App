@@ -1,175 +1,71 @@
 package services
 
 import (
-	"database/sql"
+	"time"
 )
 
 type User struct {
-	ID         int
-	Name       string
-	Age        string
-	Profession string
+	ID         int  `gorm:"PRIMARY_KEY; UNIQUE; AUTO_INCREMENT; NOT NULL;" json:"id"`
+	Name       string `gorm:"type:varchar(100); NOT NULL;" json:"name"`
+	Age        int
+	Profession string `gorm:"type:varchar(100); NOT NULL;" json:"profession"`
 	Friendly   bool
-	Blogs 		[]Blog
+	Blogs 		[]Blog  `gorm:"foreignkey:AUTHORID;" json:"blogs"`
+	CreatedAt time.Time `gorm:"default:current_timestamp" json:"created_at"`
+	UpdatedAt time.Time `gorm:"default:current_timestamp" json:"updated_at"`
 }
 
-const (
-	selectByName  = "SELECT * FROM users JOIN blog ON blog.author_id = users.id WHERE users.name=$1;"
-	selectByID    = "SELECT * FROM users JOIN blog ON blog.author_id = users.id WHERE users.id=$1;"
-	createUserSQL = "INSERT INTO users(name, age, profession, friendly) VALUES ($1, $2, $3, $4) RETURNING *;"
-	selectAllUsers = "SELECT * FROM users JOIN blog ON blog.author_id = users.id"
-)
 
-func (d *DB) GetUserByName(name string) ([]User, error) {
+func (d *DB) GetUserByName(name string) (users []User, err error) {
 
-	rows, err := queryDB(d, name, selectByName)
+	err = d.Debug().Preload("Blogs").Where("name = ?", name).Find(&users).Error
 
 	if err != nil {
 		return nil, err
-	}
-
-	var user User
-
-	var blog Blog
-
-	var users []User
-
-	for rows.Next() {
-		err = decodeUser(rows, &user, &blog)
-
-		if err != nil {
-			return nil, err
-		}
-
-		users = append(users, constructUser(user, blog))
 	}
 
 	return users, nil
 }
 
-func (d *DB) GetAllUsers() ([]User, error) {
+func (d *DB) GetAllUsers() (users []User, err error) {
 
-	rows, err := queryDB(d, nil, selectAllUsers)
+	err = d.Debug().Preload("Blogs").Find(&users).Error
+
 
 	if err != nil {
 		return nil, err
-	}
-
-	var user User
-
-	var users []User
-
-	var blog Blog
-
-	for rows.Next() {
-		err = decodeUser(rows, &user, &blog)
-
-		if err != nil {
-			return nil, err
-		}
-
-		users = append(users, constructUser(user, blog))
 	}
 
 	return users, nil
+
 }
 
-func (d *DB) GetUserByID(id int) (User, error) {
+func (d *DB) GetUserByID(id int) (user User, err error) {
 
-	rows, err := queryDB(d, id, selectByID)
+	err = d.Debug().Preload("Blogs").Where("id = ?", id).First(&user).Error
+
 
 	if err != nil {
 		return User{}, err
 	}
 
-	var user User
+	return user, nil
 
-	var blog Blog
-
-	for rows.Next() {
-		err = decodeUser(rows, &user, &blog)
-
-		if err != nil {
-			return User{}, err
-		}
-	}
-
-	retUser := constructUser(user, blog)
-
-
-	return retUser, nil
 }
 
-func (d *DB) CreateUser(user map[string]interface{}) (User, error) {
+func (d *DB) CreateUser(args map[string]interface{}) (user User, err error) {
 
-	stmt, err := d.Prepare(createUserSQL)
+	 user.Name = args["name"].(string)
+	 user.Age = args["age"].(int)
+	 user.Profession = args["profession"].(string)
+	 user.Friendly = args["friendly"].(bool)
+
+	err = d.Debug().Model(&User{}).Create(&user).Error
 
 	if err != nil {
 		return User{}, err
 	}
 
-	res, err := stmt.Query(user["name"], user["age"], user["profession"], user["friendly"])
-
-	if err != nil {
-		return User{}, err
-	}
-
-	var resUser User
-
-	for res.Next() {
-		err = res.Scan(&resUser.ID, &resUser.Name, &resUser.Age, &resUser.Profession, &resUser.Friendly)
-		if err != nil {
-			return User{}, nil
-		}
-	}
-
-	return resUser, nil
+	return user, nil
 }
 
-
-func decodeUser(rows *sql.Rows, user *User, blog *Blog) error {
-	err := rows.Scan(&user.ID, &user.Name, &user.Age, &user.Profession,
-		&user.Friendly, &blog.ID, &blog.Title,
-		&blog.NumberOfComments, &blog.Content, &blog.AuthorID)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func constructUser (user User, blog Blog) User {
-	var Blogs []Blog
-
-	return User{
-		ID:         user.ID,
-		Name:       user.Name,
-		Age:        user.Age,
-		Profession: user.Profession,
-		Friendly:   user.Friendly,
-		Blogs:      append(Blogs, blog),
-	}
-}
-
-func queryDB(d *DB, param interface{}, query string) (*sql.Rows, error) {
-	stmt, err := d.Prepare(query)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var rows *sql.Rows
-
-	if param == nil {
-		rows, err = stmt.Query()
-
-	} else {
-		rows, err = stmt.Query(param)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return rows, nil
-}

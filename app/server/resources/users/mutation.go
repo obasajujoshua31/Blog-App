@@ -1,9 +1,6 @@
 package users
 
-import (
-	"github.com/graphql-go/graphql"
-)
-
+import "github.com/graphql-go/graphql"
 
 func GetMutation(resolver UserResolver) map[string]*graphql.Field {
 		fields:=  &graphql.Field{
@@ -20,5 +17,4 @@ func GetMutation(resolver UserResolver) map[string]*graphql.Field {
 		return map[string]*graphql.Field{
 			"create": fields,
 		}
-
 }

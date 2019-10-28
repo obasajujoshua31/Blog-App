@@ -6,12 +6,12 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/friendsofgo/graphiql v0.2.2
-	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-chi/render v1.0.1
 	github.com/go-siris/siris v7.4.0+incompatible // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/graphql-go/graphql v0.7.8
+	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/gommon v0.3.0 // indirect

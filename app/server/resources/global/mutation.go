@@ -20,4 +20,3 @@ func getMutation(resolver services.Resolver) graphql.Fields {
 
 	return userFields
 }
-

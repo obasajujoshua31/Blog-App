@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"os"
 	"strconv"
 )
@@ -18,13 +18,13 @@ type AppConfig struct {
 
 func GetConfig() (AppConfig, error) {
 
-	err := godotenv.Load()
+	//err := godotenv.Load()
+	//
+	//if err != nil {
+	//	return AppConfig{}, err
+	//}
 
-	if err != nil {
-		return AppConfig{}, err
-	}
-
-	port, err := strconv.Atoi(os.Getenv("PORT"))
+	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 
 	if err != nil {
 		return AppConfig{}, err
@@ -36,7 +36,7 @@ func GetConfig() (AppConfig, error) {
 		Port:     port,
 		Password: os.Getenv("PASSWORD"),
 		DBName:   os.Getenv("DBNAME"),
-		AppPort:  fmt.Sprintf(":%s", os.Getenv("APP_PORT")),
+		AppPort:  fmt.Sprintf(":%s", os.Getenv("PORT")),
 	}
 	return config, nil
 

@@ -1,4 +1,4 @@
-package main
+package seeders
 
 import (
 	"blog-app/app/config"
@@ -59,7 +59,7 @@ var Blogs = []services.Blog{
 	},
 }
 
-func main() {
+func Run() {
 	appConfig, err := config.GetConfig()
 
 	if err != nil {

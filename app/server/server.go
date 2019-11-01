@@ -3,6 +3,8 @@ package server
 import (
 	"blog-app/app/config"
 	"blog-app/app/services"
+	"blog-app/db/migrate"
+	"blog-app/db/seeders"
 	"fmt"
 	"github.com/graphql-go/graphql"
 	"net/http"
@@ -23,18 +25,8 @@ func Start() error {
 		return err
 	}
 
-
-	//data, err := db.GetUserByID(1)
-	//
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//dt, err := json.Marshal(data)
-	//if err != nil {
-	//	return err
-	//}
-	//fmt.Println("Data printed", string(dt))
+	migrate.Run()
+	seeders.Run()
 
 	rootQuery :=global.NewRoot(db)
 

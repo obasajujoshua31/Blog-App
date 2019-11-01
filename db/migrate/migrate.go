@@ -1,4 +1,4 @@
-package main
+package migrate
 
 import (
 	"blog-app/app/config"
@@ -7,7 +7,7 @@ import (
 )
 
 
-func main() {
+func Run() {
 	appConfig, err := config.GetConfig()
 
 	if err != nil {

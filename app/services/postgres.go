@@ -30,7 +30,7 @@ func New(connString string) (*DB, error) {
 
 func connString(connString config.AppConfig) string {
 	conn := fmt.Sprintf(
-		"host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", connString.Host, connString.Port, connString.User, connString.DBName, connString.Password)
+		"host=%s port=%d user=%s dbname=%s password=%s sslmode=require", connString.Host, connString.Port, connString.User, connString.DBName, connString.Password)
 
 	return conn
 }
